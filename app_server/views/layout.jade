@@ -1,7 +1,12 @@
 doctype html
 html
   head
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title= title
+    link(rel='stylesheet' href='/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block content
+    button.btn.btn-primary test
+    script(src='/javascripts/jquery-1.12.0.js')
+    script(src='/bootstrap/js/bootstrap.js')
