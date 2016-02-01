@@ -9,4 +9,6 @@ router.get('/', cntrlLocations.homeList);
 router.get('/location', cntrlLocations.locationInfo);
 router.get('/location/review/new', cntrlLocations.addReview);
 
+router.get('/about', cntrlOthers.about);
+
 module.exports = router;
