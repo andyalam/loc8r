@@ -60,6 +60,7 @@ process.on('SIGTERM', function() {
    });
 });
 
+require('./locations');
 /*
 Earlier Windows systems will need a custom windows SIGINT solution
 Dependency: "readline" : "0.0.x"

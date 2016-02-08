@@ -1,0 +1,31 @@
+//example of a DB entry
+//coords are long then lat
+{
+    name: 'Fitness Evolution',
+    address: '1295 East Shaw Avenue, Clovis, CA 93612',
+    rating: 4,
+    facilities: ['Free weights', 'Cardio machines', 'One Squat Rack...'],
+    coords: [-119.6928640, 36.8099460,],
+    openingTimes: [{
+        days: 'Monday - Thursday',
+        opening: '5:00am',
+        closing: '11:00pm',
+        closed: false
+    }, {
+        days: 'Friday',
+        opening: '5:00am',
+        closing: '9:00pm',
+        closed: false
+    }, {
+        days: 'Saturday - Sunday',
+        opening: '7:00am',
+        closing: '7:00pm',
+        closed: false
+    }],
+    reviews: [{
+        author: 'Andy Alameddine',
+        rating: 4,
+        timestamp: new Date("30 January, 2016"),
+        reviewText: "Get another squat rack before my legs atrophy"
+    }]
+}
