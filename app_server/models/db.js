@@ -22,6 +22,10 @@ var gracefulShutdown;
 //URI format
 //mongodb://username:password@localhost:27027/database
 var dbURI = 'mongodb://localhost/Loc8r';
+if (process.env.NODE_ENV === 'production') {
+    dbURI = process.env.MONGOLAB_URI;
+}
+
 mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', function() {

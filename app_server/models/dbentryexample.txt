@@ -1,3 +1,32 @@
+DB commands
+db.colletionName.find(queryObject).pretty()
+db.collectionName.save(Object)
+db.collectionName.update(queryObject, {$push :{} })
+show collections
+use DBName
+
+mongolab:
+
+heroku config:set MONGOLAB_URI=your_db_uri
+heroku config:get MONGOLAB_URI
+heroku addons:add mongolab
+heroku addons:open mongolab
+
+URI
+mongodb://username:password@localhost:PORT/databaseName
+
+h: live host and port
+d: live database name
+o: the output destination folder
+u: username
+p: password
+mongodump -h localhost:PORT -d DATABASENAME -o LOCALFOLDER
+mongorestore -h ds033669.mongolab.com:33669 -d heroku_app20110907 -u heroku_app20110907 -p 4rqhlidfdqq6vgdi06c15jrlpf ~tmp/mongodump/Loc8r
+
+external DB
+mongo hostname:port/database_name -u username -p password
+
+
 //example of a DB entry
 //coords are long then lat
 {
