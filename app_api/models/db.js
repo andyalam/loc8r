@@ -8,7 +8,7 @@ For multiple connections, just use a variable for the function createConnection(
 var dbURIlog = 'mongodb://localhost/Loc8rLog';
 var logDB = mongoose.createConnection(dbURIlog);
 
-in use:
+while in use:
 
 logDB.on('connected', function() {
     console.log('Mongoose connected to ' + dbURIlog);
