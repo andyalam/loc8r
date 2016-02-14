@@ -65,7 +65,8 @@ module.exports.reviewsReadOne = function(req, res) {
 
 
 
-
+/* POST a new review */
+//locations/:locationid/reviews
 module.exports.reviewsCreate = function(req, res) {
     var locationid = req.params.locationid;
     if (locationid) {
@@ -110,6 +111,7 @@ var doAddReview = function(req, res, location) {
     }
 };
 
+//function can be generalized in other requests where rating is changed
 var updateAverageRating = function(locationid) {
     Loc
       .findById(locationid)
@@ -126,7 +128,7 @@ var doSetAverageRating = function(location) {
     if (location.reviews && location.reviews.length > 0) {
         reviewCount = location.reviews.length;
         ratingTotal = 0;
-        for (var i = 0; i < reviewCount; i++) {
+        for (i = 0; i < reviewCount; i++) {
             ratingTotal += location.reviews[i].rating;
         }
         ratingAverage = parseInt(ratingTotal/reviewCount, 10);
@@ -149,9 +151,54 @@ var doSetAverageRating = function(location) {
 
 
 
-
+/* PUT (update) an existing review */
+//locations/:locationid/reviews/:reviewid
 module.exports.reviewsUpdateOne = function(req, res) {
-    sendJsonResponse(res, 200, {"status": "success"});
+    if(!req.params.locationid || !req.params.reviewid) {
+        sendJsonResponse(res, 404, {
+            "message": "Not found, locationid and reviewid are both required"
+        });
+        return;
+    }
+    Loc
+      .findById(req.param.locationid)
+      .select('reviews')
+      .exec(function(err, location){
+          var thisReview;
+          if(!location) {
+              sendJsonResponse(res, 404, {
+                  "message": "locationid not found"
+              });
+              return;
+          } else if (err) {
+              sendJsonResponse(res, 400, err);
+              return;
+          }
+          if(location.reviews && location.reviews.length > 0) {
+              thisReview = location.reviews.id(req.params.reviewid);
+              if(!thisReview) {
+                  sendJsonResponse(res, 404, {
+                      "message": "reviewid not found"
+                  });
+              } else {
+                  thisReview.author = req.body.author;
+                  thisReview.rating = req.body.rating;
+                  thisReview.reviewText = req.body.reviewText;
+                  location.save(function(err, location) {
+                     if(err) {
+                         sendJsonResponse(res, 404, err);
+                     } else {
+                         updateAverageRating(location._id);
+                         sendJsonResponse(res, 200, thisReview);
+                     }
+                  });
+              }
+          } else {
+              sendJsonResponse(res, 404, {
+                  "message": "No review to update"
+              });
+          }
+      });
 };
 
 
@@ -161,7 +208,8 @@ module.exports.reviewsUpdateOne = function(req, res) {
 
 
 
-
+/* DELETE a review */
+//locations/:locationid/reviews/:reviewid
 module.exports.reviewsDeleteOne = function(req, res) {
     sendJsonResponse(res, 200, {"status": "success"});
 };
