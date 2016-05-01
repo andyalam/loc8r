@@ -41,7 +41,7 @@ module.exports.locationsListByDistance = function (req, res) {
         maxDistance: 16093.4, //16093.4m or 10 miles
         num: 10
     };
-    if (!lng || !lat) {
+    if ((!lng && lng != 0) || (!lat && lng != 0)) {
         sendJsonResponse(res, 404, {
             "message": "lng and lat query parameters are required"
         });
