@@ -8,7 +8,7 @@ if (process.env.NODE_ENV == 'production') {
 mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', function() {
-  console.log('Mongoose has connected');
+  console.log('Mongoose has connected to ' + dbURI);
 });
 
 mongoose.connection.on('error', function(err) {
