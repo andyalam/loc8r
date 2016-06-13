@@ -39,3 +39,13 @@ In application we can now access NODE_ENV with process.env.NODE_ENV
 
 // Access remote DB when running locally
 NODE_ENV=production MONGOLAB_URI=mongodb://heroku_v8wrdl9v:7vvuo4rsli04uteajk166vb7dj@ds013414.mlab.com:13414/heroku_v8wrdl9v nodemon
+
+Mongoose
+=============
+.find
+.findById
+.findOne
+.geoNear
+.geoSearch
+
+.exec
