@@ -49,3 +49,5 @@ Mongoose
 .geoSearch
 
 .exec
+
+?lng=-119.678576&lat=36.811873
