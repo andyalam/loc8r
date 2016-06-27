@@ -9,29 +9,34 @@ if (process.env.NODE_ENV == 'production') {
 
 
 var renderHomepage = function(req, res, next, responseBody) {
-  console.log(responseBody);
+  
+  //print error message to browser if applicable
+  var message;
+  if (!(responseBody instanceof Array)) {
+    message = "API lookup error";
+    responseBody = [];
+  } else {
+    if (!responseBody.length) {
+      message = "No places found nearby";
+    }
+  }
+
+  // Render - error message passed in if applicable
   res.render('locations-list', {
       pageHeader: {
         title: 'Loc8r',
         strapline: 'Find places to work with wifi near you!'
       },
       sidebar: 'Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you\'re looking for.',
-      locations: responseBody
+      locations: responseBody,
+      message: message
   });
 };
 
 
+// Meters to Freedom units
 var _formatDistance = function(distance) {
-
-  var numDistance, unit;
-  if ( distance > 1000) {
-    numDistance = parseFloat(distance).toFixed(1);
-    unit = 'km';
-  } else {
-    numDistance = distance;
-    unit = 'm';
-  }
-  return numDistance + unit;
+  return (distance / 1609.34).toFixed(2) + ' miles';
 }
 
 /* GET home page. */
@@ -46,7 +51,7 @@ module.exports.homelist = function(req, res, next) {
     qs: {
       lng: -119.678576,
       lat: 36.811873,
-      maxDistance: 10000
+      maxDistance: 1000000  // Meters
     }
   };
 
