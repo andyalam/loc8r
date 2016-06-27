@@ -1,31 +1,72 @@
+var request = require('request');
+var apiOptions = {
+  server: "http://localhost:3000"
+};
+
+if (process.env.NODE_ENV == 'production') {
+  apiOptions.server = "https://infinite-plateau-97542.herokuapp.com";
+}
+
+
+var renderHomepage = function(req, res, next, responseBody) {
+  console.log(responseBody);
+  res.render('locations-list', {
+      pageHeader: {
+        title: 'Loc8r',
+        strapline: 'Find places to work with wifi near you!'
+      },
+      sidebar: 'Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you\'re looking for.',
+      locations: responseBody
+  });
+};
+
+
+var _formatDistance = function(distance) {
+
+  var numDistance, unit;
+  if ( distance > 1000) {
+    numDistance = parseFloat(distance).toFixed(1);
+    unit = 'km';
+  } else {
+    numDistance = distance;
+    unit = 'm';
+  }
+  return numDistance + unit;
+}
+
 /* GET home page. */
 module.exports.homelist = function(req, res, next) {
-  res.render('locations-list', {
-    pageHeader: {
-      title: 'Loc8r',
-      strapline: 'Find places to work with wifi near you!'
-    },
-    sidebar: 'Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you\'re looking for.',
-    locations: [{
-      name: 'Starbucks',
-      address: '123 Test St, Clovis, CA',
-      rating: 3,
-      facilities: ['hot water', 'cold water', 'air'],
-      distance: '200m'
-    },{
-      name: 'Chinese Empire',
-      address: '456 Djing Ln, San Francisco, CA',
-      rating: 5,
-      facilities: ['chinese food', 'japanese food', 'all food'],
-      distance: '200000m'
-    },{
-      name: 'FooBae',
-      address: '890 Street Ave, Cupertino, CA',
-      rating: 4,
-      facilities: ['foo', 'bar', 'goo?'],
-      distance: '150000m'
-    }]
-  });
+  
+  var requestOptions, path;
+  path = '/api/locations';
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {},
+    qs: {
+      lng: -119.678576,
+      lat: 36.811873,
+      maxDistance: 10000
+    }
+  };
+
+  request(
+    requestOptions,
+    function(err, response, body) {
+
+      var i, data;
+      data = body;
+      if (response.statusCode === 200 && data.length) {
+        for (i = 0; i < data.length; i++) {
+          data[i].distance = _formatDistance(data[i].distance);
+        }
+      }
+
+      renderHomepage(req, res, next, data);
+
+    }
+  );
+
 };
 
 module.exports.locationInfo = function(req, res, next) {

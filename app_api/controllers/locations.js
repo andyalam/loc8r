@@ -41,13 +41,14 @@ var parseLocations = function(docs) {
 module.exports.locationsListByDistance = function(req, res, next) {
   var lng = parseFloat(req.query.lng);
   var lat = parseFloat(req.query.lat);
+  var distanceLimit = parseFloat(req.query.maxDistance);
   var point = {
     type: "Point",
     coordinates: [lng, lat]
   };
   var geoOptions = {
     spherical: true,
-    maxDistance: 16093.4, //16093.4m or 10 miles
+    maxDistance: distanceLimit, //16093.4m or 10 miles
     num: 10
   };
 
