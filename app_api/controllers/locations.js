@@ -68,7 +68,7 @@ module.exports.locationsListByDistance = function(req, res, next) {
   });
 };
 
-// POST 
+// POST
 module.exports.locationsCreate = function(req, res, next) {
     Loc.create({
       name: req.body.name,
@@ -140,7 +140,7 @@ module.exports.locationsUpdateOne = function(req, res, next) {
             'message': 'locationid not found'
           });
           return;
-          
+
         } else if (err) {
           sendJsonResponse(res, 400, err);
           return;
@@ -162,7 +162,7 @@ module.exports.locationsUpdateOne = function(req, res, next) {
           closing: req.body.closing2,
           closed: req.body.closed2
         }];
-        
+
         location.save(function(err, location) {
           if (err) {
             sendJsonResponse(res, 404, err);

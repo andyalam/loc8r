@@ -9,7 +9,7 @@ if (process.env.NODE_ENV == 'production') {
 
 
 var renderHomepage = function(req, res, next, responseBody) {
-  
+
   //print error message to browser if applicable
   var message;
   if (!(responseBody instanceof Array)) {
@@ -34,14 +34,30 @@ var renderHomepage = function(req, res, next, responseBody) {
 };
 
 
+var renderDetailPage = function (req, res, next, locDetail) {
+  console.log(locDetail);
+  res.render('location-info', {
+    title: locDetail.name,
+    pageHeader: { title: locDetail.name },
+    sidebar: {
+      context: 'is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
+      callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you',
+    },
+    location: locDetail
+  });
+};
+
+
 // Meters to Freedom units
 var _formatDistance = function(distance) {
-  return (distance / 1609.34).toFixed(2) + ' miles';
-}
+  return (distance / 1609.34).toFixed(1) + ' miles';
+};
+
+/******************************************************************************/
 
 /* GET home page. */
 module.exports.homelist = function(req, res, next) {
-  
+
   var requestOptions, path;
   path = '/api/locations';
   requestOptions = {
@@ -75,7 +91,26 @@ module.exports.homelist = function(req, res, next) {
 };
 
 module.exports.locationInfo = function(req, res, next) {
-  res.render('location-info', { title: 'Location Info' });
+  var requestOptions, path;
+  path = '/api/locations/' + req.params.locationid;
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+
+  request(
+    requestOptions,
+    function(err, response, body) {
+        var data = body;
+        data.coords = {
+          lng : body.coords[0],
+          lat : body.coords[1]
+        }
+        renderDetailPage(req, res, next, data);
+    }
+  );
+
 };
 
 module.exports.addReview = function(req, res, next) {
