@@ -8,7 +8,7 @@ var sendJsonResponse = function(res, status, content) {
 
 var doSetAverageRating = function(location) {
 
-  var i, reviewCount, ratingAverage, ratingTotal; 
+  var i, reviewCount, ratingAverage, ratingTotal;
 
   if (location.reviews && location.reviews.length > 0) {
     reviewCount = location.reviews.length;
@@ -177,7 +177,7 @@ module.exports.reviewsUpdateOne = function(req, res, next) {
           thisReview = location.reviews.id(req.params.reviewid);
 
           if (!thisReview) {
-            sendJsonResponse(res, 404, { 
+            sendJsonResponse(res, 404, {
               'message': 'reviewid not found'
             });
             return;

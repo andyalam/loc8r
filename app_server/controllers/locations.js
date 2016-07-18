@@ -34,8 +34,7 @@ var renderHomepage = function(req, res, next, responseBody) {
 };
 
 
-var renderDetailPage = function (req, res, next, locDetail) {
-  console.log(locDetail);
+var renderDetailPage = function (req, res, locDetail) {
   res.render('location-info', {
     title: locDetail.name,
     pageHeader: { title: locDetail.name },
@@ -48,13 +47,48 @@ var renderDetailPage = function (req, res, next, locDetail) {
 };
 
 
+var renderReviewForm = function(req, res, locDetail) {
+  res.render('location-review-form', {
+    title: 'Review ' + locDetail.name + ' on Loc8r',
+    pageHeader: { title: 'Review ' + locDetail.name }
+  });
+};
+
+
+var getLocationInfo = function(req, res, callback) {
+  var requestOptions, path;
+  path = '/api/locations/' + req.params.locationid;
+  requestOptions = {
+    url: apiOptions.server + path,
+    method: "GET",
+    json: {}
+  };
+
+  request(
+    requestOptions,
+    function(err, response, body) {
+        var data = body;
+        if (response.statusCode === 200) {
+          data.coords = {
+            lng : body.coords[0],
+            lat : body.coords[1]
+          }
+          callback(req, res, data);
+        } else {
+          _showError(req, res, response.statusCode);
+        }
+    }
+  );
+}
+
+
 // Meters to Freedom units
 var _formatDistance = function(distance) {
   return (distance / 1609.34).toFixed(1) + ' miles';
 };
 
 
-var _showError = function(req, res, next, status) {
+var _showError = function(req, res, status) {
   var title, content;
 
   if (status === 404) {
@@ -100,7 +134,6 @@ module.exports.homelist = function(req, res, next) {
           data[i].distance = _formatDistance(data[i].distance);
         }
       }
-
       renderHomepage(req, res, next, data);
 
     }
@@ -109,32 +142,45 @@ module.exports.homelist = function(req, res, next) {
 };
 
 module.exports.locationInfo = function(req, res, next) {
-  var requestOptions, path;
-  path = '/api/locations/' + req.params.locationid;
+  getLocationInfo(req, res, function(req, res, responseData) {
+    renderDetailPage(req, res, responseData);
+  });
+
+};
+
+module.exports.addReview = function(req, res, next) {
+  getLocationInfo(req, res, function(req, res, responseData) {
+    renderReviewForm(req, res, responseData);
+  });
+};
+
+module.exports.doAddReview = function(req, res, next) {
+  var requestOptions, path, locationid, postdata;
+
+  locationid = req.params.locationid;
+  path = '/api/locations/' + locationid + '/reviews';
+
+  postdata = {
+    author: req.body.name,
+    rating: parseInt(req.body.rating, 10),
+    reviewText: req.body.review
+  };
+
   requestOptions = {
     url: apiOptions.server + path,
-    method: "GET",
-    json: {}
+    method: 'POST',
+    json: postdata
   };
 
   request(
     requestOptions,
     function(err, response, body) {
-        var data = body;
-        if (response.statusCode === 200) {
-          data.coords = {
-            lng : body.coords[0],
-            lat : body.coords[1]
-          }
-          renderDetailPage(req, res, next, data);
-        } else {
-          _showError(req, res, next, response.statusCode);
-        }
+      if (response.statusCode === 201) {
+        res.redirect('/location/'+ locationid);
+      } else {
+        _showError(req, res, response.statusCode);
+      }
     }
   );
 
-};
-
-module.exports.addReview = function(req, res, next) {
-  res.render('location-review-form', { title: 'Add review' });
 };
