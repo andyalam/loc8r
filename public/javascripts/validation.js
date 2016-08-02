@@ -1,8 +1,6 @@
-console.log('connected');
 $('#addReview').submit(function(e) {
   var alertMessage = $('.alert.alert-danger')
   alertMessage.hide();
-  console.log('activ e');
   if (!$('input#name').val() || !$('select#rating').val() || !$('textarea#review').val()) {
     if (alertMessage.length) {
       alertMessage.show();
