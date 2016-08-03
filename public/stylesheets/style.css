@@ -26,3 +26,9 @@
 .page-header {
   margin-top: 0;
 }
+
+#filter {
+  margin-left: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
