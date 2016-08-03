@@ -10,26 +10,13 @@ if (process.env.NODE_ENV == 'production') {
 
 var renderHomepage = function(req, res, next, responseBody) {
 
-  //print error message to browser if applicable
-  var message;
-  if (!(responseBody instanceof Array)) {
-    message = "API lookup error";
-    responseBody = [];
-  } else {
-    if (!responseBody.length) {
-      message = "No places found nearby";
-    }
-  }
-
-  // Render - error message passed in if applicable
   res.render('locations-list', {
+      title: 'Loc8r - find a place to work with wifi',
       pageHeader: {
         title: 'Loc8r',
         strapline: 'Find places to work with wifi near you!'
       },
       sidebar: 'Looking for wifi and a seat? Loc8r helps you find places to work when out and about. Perhaps with coffee, cake or a pint? Let Loc8r help you find the place you\'re looking for.',
-      locations: responseBody,
-      message: message
   });
 };
 
@@ -83,12 +70,6 @@ var getLocationInfo = function(req, res, callback) {
 }
 
 
-// Meters to Freedom units
-var _formatDistance = function(distance) {
-  return (distance / 1609.34).toFixed(1) + ' miles';
-};
-
-
 var _showError = function(req, res, status) {
   var title, content;
 
@@ -110,7 +91,8 @@ var _showError = function(req, res, status) {
 
 /* GET home page. */
 module.exports.homelist = function(req, res, next) {
-
+  renderHomepage(req, res);
+  /*
   var requestOptions, path;
   path = '/api/locations';
   requestOptions = {
@@ -139,6 +121,7 @@ module.exports.homelist = function(req, res, next) {
 
     }
   );
+  */
 
 };
 
