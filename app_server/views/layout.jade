@@ -21,14 +21,18 @@ html(ng-app='loc8rApp')
               a(href='/about/') About
   
     .container.site-wrapper
-      block content
+      div(ng-view)
+        block content
       
       footer
         .row
           .col-xs-12
             small &copy; Andy Alameddine 2016
-    script(src='/javascripts/angular.min.js')
-    script(src='/javascripts/loc8rApp.js')
+    script(src='/angular/angular.min.js')
+    script(src='/angular/lib/angular-route.min.js')
+    script(src='/app.js')
+    script(src='/home/home.controller.js')
+    
     script(src='/javascripts/jquery-1.12.0.js')
     script(src='/bootstrap/js/bootstrap.min.js')
     script(src='/javascripts/validation.js')
