@@ -25,32 +25,22 @@ var ratingStars = function() {
 };
 
 
-var locationListCtrl = function ($scope) {
-  $scope.data = {
-    locations: [{
-      name: "Mickeys Yogurt",
-      address: "219 Shaw Ave Ste A, Clovis, CA 93611",
-      rating: 5,
-      facilities: [
-        "Yogurt",
-        "Assorted Candy",
-        "Fruit"
-      ],
-      distance: "5465464",
-      _id: "56be06d7a628c8938aba0455"
-    }, {
-      name: "Kuppa Joy Coffee House",
-      address: "518 Clovis Ave, Clovis, CA 93612",
-      rating: 4,
-      facilities: [
-        "Hot Drinks",
-        "Food",
-        "Premium Wifi"
-      ],
-      distance: "12131212",
-      _id: "56be099fa628c8938aba0459"
-    }]
-  };
+var loc8rData = function($http) {
+  return $http.get('/api/locations?lng=-119.678576&lat=36.811873&maxDistance=10000');
+};
+
+
+var locationListCtrl = function ($scope, loc8rData) {
+  $scope.message = "Searching for nearby places..";
+  loc8rData
+    .success(function(data) {
+      $scope.message = data.length > 0 ? "" : "No locations found";
+      $scope.data = { locations: data };
+    })
+    .error(function(e) {
+      $scope.message = "Sorry, something's gone wrong.";
+      console.log(e);
+    });
 
 };
 
@@ -60,4 +50,5 @@ angular
   .module('loc8rApp', [])
   .controller('locationListCtrl', locationListCtrl)
   .filter('formatDistance', formatDistance)
-  .directive('ratingStars', ratingStars);
+  .directive('ratingStars', ratingStars)
+  .service('loc8rData', loc8rData);
