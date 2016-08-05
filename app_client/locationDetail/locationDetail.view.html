@@ -55,7 +55,7 @@
             </div>
             <div class="panel-body review-container">
               <div class="row">
-                <div class="review" ng-repeat="review in vm.data.location.reviews">
+                <div class="review" ng-repeat="review in vm.data.location.reviews | orderBy:'createdOn':true">
                   <div class="well well-sm review-header">
                     <span class="rating" rating-stars rating="review.rating"></span>
                     <span class="reviewAuthor">{{ review.author }}</span>
