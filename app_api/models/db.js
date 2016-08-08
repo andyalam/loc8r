@@ -42,7 +42,8 @@ process.on('SIGINT', function() {
 process.on('SIGTERM', function() {
   gracefulShutdown('heroku app shutdown', function() {
     process.exit(0);
-  })
+  });
 });
 
 require('./locations');
+require('./users');
