@@ -22,7 +22,7 @@
       });
 
     vm.popupReviewForm = function() {
-      var modelInstance = $uibModal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: '/reviewModal/reviewModal.view.html',
         controller: 'reviewModalCtrl as vm',
         resolve: {
@@ -34,7 +34,12 @@
           }
         }
       });
+
+      modalInstance.result.then(function(data) {
+        vm.data.location.reviews.push(data);
+      });
     };
+
   }
 
 })();

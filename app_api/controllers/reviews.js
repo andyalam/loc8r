@@ -32,7 +32,7 @@ var doSetAverageRating = function(location) {
       console.log('Average rating update to: ', ratingAverage);
   });
 
-}
+};
 
 var updateAverageRating = function(locationid) {
   Loc
@@ -45,7 +45,7 @@ var updateAverageRating = function(locationid) {
           doSetAverageRating(location);
         }
       });
-}
+};
 
 var doAddReview = function(req, res, location) {
   if (!location) {
@@ -92,7 +92,7 @@ module.exports.reviewsCreate = function(req, res, next) {
             doAddReview(req, res, location);
           }
         }
-      )
+      );
   } else {
     sendJsonResponse(res, 404, {
       'message': 'Not found, locationid required'
@@ -140,7 +140,7 @@ module.exports.reviewsReadOne = function(req, res, next) {
               'message': 'No reviews found'
             });
           }
-        })
+        });
   } else {
     sendJsonResponse(res, 404, {
       'message': 'Not found, locationid and reviewid are both required'
@@ -207,7 +207,7 @@ module.exports.reviewsUpdateOne = function(req, res, next) {
         }
 
       }
-    )
+    );
 };
 
 // DELETE
@@ -251,7 +251,7 @@ module.exports.reviewsDeleteOne = function(req, res, next) {
                 updateAverageRating(location._id);
                 sendJsonResponse(res, 204, null);
               }
-            })
+            });
           }
 
         } else {
@@ -262,6 +262,6 @@ module.exports.reviewsDeleteOne = function(req, res, next) {
         }
 
       }
-    )
+    );
 
 };
