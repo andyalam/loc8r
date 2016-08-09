@@ -6,7 +6,8 @@
   function navigation() {
     return {
       restrict: 'EA',
-      templateUrl: '/common/directives/navigation/navigation.directive.html'
+      templateUrl: '/common/directives/navigation/navigation.directive.html',
+      controller: 'navigationCtrl as navvm'
     };
   }
 

@@ -16,13 +16,13 @@
 
     var register = function(user) {
       return $http.post('/api/register', user).success(function(data) {
-        saveToken(data);
+        saveToken(data.token);
       });
     };
 
     var login = function(user) {
       return $http.post('/api/login', user).success(function(data) {
-        saveToken(data);
+        saveToken(data.token);
       });
     };
 
