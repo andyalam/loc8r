@@ -4,8 +4,8 @@
     .module('loc8rApp')
     .controller('locationDetailCtrl', locationDetailCtrl);
 
-  locationDetailCtrl.$inject = ['$routeParams', '$uibModal', 'loc8rData'];
-  function locationDetailCtrl($routeParams, $uibModal, loc8rData) {
+  locationDetailCtrl.$inject = ['$routeParams', '$uibModal', '$location', 'loc8rData', 'authentication'];
+  function locationDetailCtrl($routeParams, $uibModal, $location, loc8rData, authentication) {
     var vm= this;
     vm.locationid = $routeParams.locationid;
     loc8rData
@@ -20,6 +20,9 @@
         vm.message = e;
         console.log(e);
       });
+
+    vm.isLoggedIn = authentication.isLoggedIn();
+    vm.currentPath = $location.path();
 
     vm.popupReviewForm = function() {
       var modalInstance = $uibModal.open({
